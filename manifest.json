@@ -1,0 +1,46 @@
+{
+  "manifest_version": 2,
+  "name": "PageNexus",
+  "version": "0.2.0",
+  "description": "Apresenta artigos em um 'Modo de Leitura' paginado para melhorar a legibilidade.",
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "Readability.js",
+        "text_limiter.js",
+        "content_script.js"
+      ],
+      "css": [
+        "reader.css"
+      ]
+    }
+  ],
+  "browser_action": {
+    "default_title": "Ativar PageNexus - Modo de Leitura",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "pagenexus@paulista.systems"
+    }
+  }
+}

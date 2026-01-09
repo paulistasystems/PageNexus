@@ -1,0 +1,49 @@
+#pagenexus-container {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    line-height: 1.8;
+    max-width: 40em;
+    margin: 0 auto;
+    padding: 2em;
+    background-color: #fdfdfd;
+    color: #1a1a1a;
+}
+
+#pagenexus-content h1,
+#pagenexus-content h2,
+#pagenexus-content h3 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    line-height: 1.3;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+#pagenexus-content p {
+    margin-bottom: 1em;
+}
+
+#pagenexus-content a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+#pagenexus-content a:hover {
+    text-decoration: underline;
+}
+
+#pagenexus-nav-top,
+#pagenexus-nav-bottom {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    text-align: center;
+    padding: 1em 0;
+}
+
+/* Esconde todo o conteúdo original quando PageNexus está ativo */
+body:has(#pagenexus-container)>*:not(#pagenexus-container) {
+    display: none !important;
+}
+
+/* Garante que apenas o container do PageNexus seja visível */
+#pagenexus-container {
+    display: block !important;
+    visibility: visible !important;
+}

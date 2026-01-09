@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="options.css">
+</head>
+
+<body>
+  <form>
+    <div class="form-group">
+      <label for="llmPreset">IA ativa (para barra lateral do Firefox):</label>
+      <select id="llmPreset" name="llmPreset">
+        <option value="chatgpt">ChatGPT</option>
+        <option value="copilot">Copilot</option>
+        <option value="claude">Claude 3.5</option>
+        <option value="gemini">Gemini Flash</option>
+        <option value="mistral">Mistral Large</option>
+        <option value="custom">Personalizado</option>
+      </select>
+      <small>Selecione a IA que você usa na barra lateral</small>
+    </div>
+
+    <hr>
+
+    <h3>Limites de caracteres por IA</h3>
+    <small class="hint">Personalize os limites para cada IA conforme sua necessidade</small>
+
+    <div class="form-group">
+      <label for="limitChatgpt">ChatGPT:</label>
+      <input type="number" id="limitChatgpt" name="limitChatgpt" min="1000" max="1000000" value="5000">
+      <small>caracteres</small>
+    </div>
+
+    <div class="form-group">
+      <label for="limitCopilot">Copilot:</label>
+      <input type="number" id="limitCopilot" name="limitCopilot" min="1000" max="1000000" value="3000">
+      <small>caracteres</small>
+    </div>
+
+    <div class="form-group">
+      <label for="limitClaude">Claude 3.5:</label>
+      <input type="number" id="limitClaude" name="limitClaude" min="1000" max="1000000" value="10000">
+      <small>caracteres</small>
+    </div>
+
+    <div class="form-group">
+      <label for="limitGemini">Gemini Flash:</label>
+      <input type="number" id="limitGemini" name="limitGemini" min="1000" max="1000000" value="35000">
+      <small>caracteres</small>
+    </div>
+
+    <div class="form-group">
+      <label for="limitMistral">Mistral Large:</label>
+      <input type="number" id="limitMistral" name="limitMistral" min="1000" max="1000000" value="8000">
+      <small>caracteres</small>
+    </div>
+
+    <div class="form-group">
+      <label for="limitCustom">Personalizado:</label>
+      <input type="number" id="limitCustom" name="limitCustom" min="1000" max="1000000" value="10000">
+      <small>caracteres</small>
+    </div>
+
+    <div class="status" id="saveStatus"></div>
+  </form>
+  <script src="options.js"></script>
+</body>
+
+</html>
