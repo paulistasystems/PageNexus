@@ -1,121 +1,121 @@
-# PageNexus - Extensão de Paginação Inteligente
+# PageNexus - Smart Pagination Extension
 
-## 1. Objetivo
+## 1. Purpose
 
-A finalidade desta extensão é diminuir o contexto em páginas para usar com a sidebar de IA do Firefox.
+This extension reduces page context for use with Firefox's AI sidebar.
 
-## 2. Requisitos Funcionais
+## 2. Functional Requirements
 
-### 2.1. Extração de Conteúdo Principal
-A extensão deve usar a biblioteca Readability.js da Mozilla para analisar a página e extrair o artigo principal. Isso garante a remoção automática da maior parte do conteúdo periférico.
+### 2.1. Main Content Extraction
+The extension uses Mozilla's Readability.js library to parse the page and extract the main article. This ensures automatic removal of most peripheral content.
 
-### 2.2. Paginação do Conteúdo Extraído
-O conteúdo limpo, retornado pela Readability.js, deve ser dividido em páginas. A paginação é baseada em uma contagem de caracteres configurável, mas respeita a integridade dos elementos HTML (parágrafos, títulos), evitando quebras no meio deles.
+### 2.2. Pagination of Extracted Content
+The clean content returned by Readability.js is divided into pages. Pagination is based on a configurable character count but respects HTML element integrity (paragraphs, headings), avoiding breaks in the middle of them.
 
-### 2.3. Formato de Leitura Limpo
-O conteúdo paginado deve ser exibido com uma estilização simples e legível (fonte serifada, bom espaçamento, layout de coluna única) para otimizar a experiência de leitura.
+### 2.3. Clean Reading Format
+Paginated content is displayed with simple, readable styling (serif font, good spacing, single-column layout) to optimize the reading experience.
 
-### 2.4. Navegação
-A interface deve prover botões de "Próxima Página" e "Página Anterior", além de uma opção para restaurar a visualização original da página.
+### 2.4. Navigation
+The interface provides "Next Page" and "Previous Page" buttons, plus an option to restore the original page view.
 
-## 3. Configurações
+## 3. Settings
 
-O usuário poderá configurar os seguintes itens através de uma página de opções da extensão:
+Users can configure the following items through the extension's options page:
 
-*   **Número de Caracteres por Página:** Um valor numérico que servirá como guia para a lógica de paginação inteligente.
-*   **Limite de Caracteres para IA:** Limite máximo de caracteres ao enviar conteúdo para IA nativa do Firefox (padrão: 10.000). Evita erros 400 e outros limites ao resumir páginas grandes.
+*   **Characters per Page:** A numeric value that guides the smart pagination logic.
+*   **AI Character Limit:** Maximum character limit when sending content to Firefox's native AI (default: 10,000). Prevents 400 errors and other limits when summarizing large pages.
 
-A configuração será salva localmente no navegador usando a API `browser.storage`.
+Settings are saved locally in the browser using the `browser.storage` API.
 
-## 4. Portabilidade
+## 4. Portability
 
-O código será escrito utilizando as APIs de WebExtensions, o que facilitará a adaptação futura para outros navegadores, como Google Chrome e Microsoft Edge, com o mínimo de alterações no código-fonte.
+The code is written using WebExtensions APIs, facilitating future adaptation to other browsers such as Google Chrome and Microsoft Edge with minimal source code changes.
 
-## 5. Estrutura de Arquivos e Componentes Chave
+## 5. File Structure and Key Components
 
-A extensão é composta pelos seguintes arquivos principais:
+The extension consists of the following main files:
 
-*   **`manifest.json`**: O arquivo de manifesto da extensão, que define metadados, permissões (incluindo `storage` para configurações e `tabs` para acesso à URL da página), e a injeção dos scripts de conteúdo (`Readability.js`, `text_limiter.js` e `content_script.js`) e estilos (`reader.css`).
-*   **`Readability.js`**: A biblioteca externa utilizada para a extração do conteúdo principal da página, replicando a funcionalidade do "Modo Leitor" do Firefox.
-*   **`text_limiter.js`**: Utilitário para truncar texto de forma inteligente, limitando o tamanho do conteúdo enviado para IA nativa do Firefox. Mantém parágrafos completos quando possível.
-*   **`content_script.js`**: O script principal que é injetado nas páginas web. Ele coordena a extração do conteúdo via Readability, a paginação, a injeção da interface do usuário, a lógica de navegação e expõe a função `getTextForAI()` para preparar texto limitado para IA.
-*   **`options.html`**: A interface de usuário para as configurações da extensão, permitindo que o usuário defina o número de caracteres por página e o limite para IA.
-*   **`options.js`**: O script que gerencia a lógica da página de opções, salvando e carregando as preferências do usuário via `browser.storage`.
-*   **`options.css`**: Estilos básicos para a página de opções.
-*   **`reader.css`**: Folha de estilos dedicada a formatar o conteúdo extraído no modo de leitura, garantindo uma experiência visual limpa e focada.
+*   **`manifest.json`**: The extension manifest file, defining metadata, permissions (including `storage` for settings and `tabs` for page URL access), and content script injection (`Readability.js`, `text_limiter.js`, and `content_script.js`) and styles (`reader.css`).
+*   **`Readability.js`**: External library used for main page content extraction, replicating Firefox's "Reader Mode" functionality.
+*   **`text_limiter.js`**: Utility for intelligently truncating text, limiting content size sent to Firefox's native AI. Keeps complete paragraphs when possible.
+*   **`content_script.js`**: The main script injected into web pages. It coordinates content extraction via Readability, pagination, UI injection, navigation logic, and exposes the `getTextForAI()` function to prepare limited text for AI.
+*   **`options.html`**: The UI for extension settings, allowing users to define characters per page and AI limit.
+*   **`options.js`**: Script managing options page logic, saving and loading user preferences via `browser.storage`.
+*   **`options.css`**: Basic styles for the options page.
+*   **`reader.css`**: Stylesheet dedicated to formatting extracted content in reading mode, ensuring a clean and focused visual experience.
 
-## 6. Como Testar Localmente
+## 6. Local Testing
 
-### 6.1. Carregar a Extensão no Firefox
+### 6.1. Load the Extension in Firefox
 
-1. **Abra o Firefox**
-2. **Digite na barra de endereços:** `about:debugging#/runtime/this-firefox`
-3. **Clique em "Carregar extensão temporária..."** (Load Temporary Add-on)
-4. **Navegue até a pasta** `/Users/username/PageNexus/PageNexus-Firefox/`
-5. **Selecione o arquivo** `manifest.json`
-6. A extensão será carregada temporariamente
+1. **Open Firefox**
+2. **Type in the address bar:** `about:debugging#/runtime/this-firefox`
+3. **Click "Load Temporary Add-on..."**
+4. **Navigate to the folder** containing the extension files
+5. **Select the file** `manifest.json`
+6. The extension will be temporarily loaded
 
-### 6.2. Configurar a Extensão
+### 6.2. Configure the Extension
 
-1. Na página `about:debugging`, clique em **"Inspecionar"** ao lado da extensão PageNexus
-2. Ou clique no ícone de extensões na barra de ferramentas e selecione **"Gerenciar extensão"**
-3. Clique em **"Opções"** ou **"Preferências"**
+1. On the `about:debugging` page, click **"Inspect"** next to the PageNexus extension
+2. Or click the extensions icon in the toolbar and select **"Manage Extension"**
+3. Click **"Options"** or **"Preferences"**
 4. Configure:
-   - **Caracteres por página:** 2500 (padrão) ou ajuste conforme preferência
-   - **Limite de caracteres para IA:** 10000 (padrão) ou ajuste conforme necessário
+   - **Characters per page:** 2500 (default) or adjust as preferred
+   - **AI character limit:** 10000 (default) or adjust as needed
 
-### 6.3. Testar Funcionalidades
+### 6.3. Test Features
 
-#### Testar Paginação
-1. Abra um artigo longo (ex: artigo da Wikipedia)
-2. A extensão deve automaticamente extrair e paginar o conteúdo
-3. Use os botões "Próxima" e "Anterior" para navegar
-4. Clique em "Restaurar Original" para voltar à página original
+#### Test Pagination
+1. Open a long article (e.g., Wikipedia article)
+2. The extension should automatically extract and paginate the content
+3. Use "Next" and "Previous" buttons to navigate
+4. Click "Restore Original" to return to the original page
 
-#### Testar Limitação para IA
-1. Abra um artigo muito longo (>10.000 caracteres)
-2. Abra o Console do Desenvolvedor (F12)
-3. Digite no console: `await window.getTextForAI()`
-4. Verifique que o texto retornado está limitado ao valor configurado
-5. Procure por logs como: `[PageNexus] Texto preparado para IA: XXXX caracteres (limite: 10000)`
+#### Test AI Limitation
+1. Open a very long article (>10,000 characters)
+2. Open Developer Console (F12)
+3. Type in console: `await window.getTextForAI()`
+4. Verify the returned text is limited to the configured value
+5. Look for logs like: `[PageNexus] Text prepared for AI: XXXX characters (limit: 10000)`
 
-#### Testar com IA Nativa do Firefox
-1. Certifique-se de que a IA nativa do Firefox está habilitada
-2. Abra um artigo longo
-3. Use a funcionalidade de resumir do Firefox
-4. Verifique que não ocorrem erros 400
-5. O conteúdo deve ser limitado automaticamente
+#### Test with Firefox Native AI
+1. Ensure Firefox's native AI is enabled
+2. Open a long article
+3. Use Firefox's summarize feature
+4. Verify no 400 errors occur
+5. Content should be automatically limited
 
-### 6.4. Depuração
+### 6.4. Debugging
 
-**Ver logs da extensão:**
-- Abra o Console do Navegador: `Ctrl+Shift+J` (Windows/Linux) ou `Cmd+Shift+J` (Mac)
-- Filtre por `[PageNexus]` para ver apenas logs da extensão
+**View extension logs:**
+- Open Browser Console: `Ctrl+Shift+J` (Windows/Linux) or `Cmd+Shift+J` (Mac)
+- Filter by `[PageNexus]` to see only extension logs
 
-**Recarregar após mudanças:**
-1. Volte para `about:debugging#/runtime/this-firefox`
-2. Clique em **"Recarregar"** ao lado da extensão
-3. Ou pressione `Ctrl+R` na página de debugging
+**Reload after changes:**
+1. Go back to `about:debugging#/runtime/this-firefox`
+2. Click **"Reload"** next to the extension
+3. Or press `Ctrl+R` on the debugging page
 
-### 6.5. Testar Diferentes Cenários
+### 6.5. Test Different Scenarios
 
-| Cenário | Tamanho do Artigo | Comportamento Esperado |
-|---------|-------------------|------------------------|
-| Artigo pequeno | < 2.500 caracteres | Sem paginação, modo leitura simples |
-| Artigo médio | 2.500 - 10.000 caracteres | Paginado, IA recebe conteúdo completo |
-| Artigo grande | > 10.000 caracteres | Paginado, IA recebe conteúdo truncado |
-| Artigo muito grande | > 50.000 caracteres | Paginado, IA recebe primeiros ~10k caracteres |
+| Scenario | Article Size | Expected Behavior |
+|----------|--------------|-------------------|
+| Small article | < 2,500 characters | No pagination, simple reading mode |
+| Medium article | 2,500 - 10,000 characters | Paginated, AI receives full content |
+| Large article | > 10,000 characters | Paginated, AI receives truncated content |
+| Very large article | > 50,000 characters | Paginated, AI receives first ~10k characters |
 
-### 6.6. Problemas Comuns
+### 6.6. Common Issues
 
-**Extensão não carrega:**
-- Verifique se o `manifest.json` está correto
-- Veja erros no console de debugging
+**Extension won't load:**
+- Check if `manifest.json` is correct
+- Look for errors in the debugging console
 
-**Paginação não funciona:**
-- Verifique se a página tem conteúdo extraível pelo Readability
-- Algumas páginas não são compatíveis (ex: SPAs complexas)
+**Pagination not working:**
+- Check if the page has content extractable by Readability
+- Some pages are not compatible (e.g., complex SPAs)
 
-**IA ainda retorna erro 400:**
-- Reduza o limite de caracteres nas configurações
-- Verifique se a função `getTextForAI()` está sendo chamada corretamente
+**AI still returns 400 error:**
+- Reduce character limit in settings
+- Verify `getTextForAI()` function is being called correctly
