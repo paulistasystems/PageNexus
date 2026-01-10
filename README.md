@@ -38,7 +38,7 @@ The extension consists of the following main files:
 *   **`manifest.json`**: The extension manifest file, defining metadata, permissions (including `storage` for settings and `tabs` for page URL access), and content script injection (`Readability.js`, `text_limiter.js`, and `content_script.js`) and styles (`reader.css`).
 *   **`Readability.js`**: External library used for main page content extraction, replicating Firefox's "Reader Mode" functionality.
 *   **`text_limiter.js`**: Utility for intelligently truncating text, limiting content size sent to Firefox's native AI. Keeps complete paragraphs when possible.
-*   **`content_script.js`**: The main script injected into web pages. It coordinates content extraction via Readability, pagination, UI injection, navigation logic, and exposes the `getTextForAI()` function to prepare limited text for AI.
+*   **`content_script.js`**: The main script injected into web pages. It coordinates content extraction via Readability, pagination, UI injection, and navigation logic.
 *   **`options.html`**: The UI for extension settings, allowing users to define characters per page and AI limit.
 *   **`options.js`**: Script managing options page logic, saving and loading user preferences via `browser.storage`.
 *   **`options.css`**: Basic styles for the options page.
@@ -72,19 +72,12 @@ The extension consists of the following main files:
 3. Use "Next" and "Previous" buttons to navigate
 4. Click "Restore Original" to return to the original page
 
-#### Test AI Limitation
-1. Open a very long article (>10,000 characters)
-2. Open Developer Console (F12)
-3. Type in console: `await window.getTextForAI()`
-4. Verify the returned text is limited to the configured value
-5. Look for logs like: `[PageNexus] Text prepared for AI: XXXX characters (limit: 10000)`
-
 #### Test with Firefox Native AI
 1. Ensure Firefox's native AI is enabled
 2. Open a long article
-3. Use Firefox's summarize feature
-4. Verify no 400 errors occur
-5. Content should be automatically limited
+3. Activate PageNexus to paginate the content
+4. Use Firefox's AI sidebar to summarize the current page
+5. Content should be limited to the current page size
 
 ### 6.4. Debugging
 
@@ -118,4 +111,4 @@ The extension consists of the following main files:
 
 **AI still returns 400 error:**
 - Reduce character limit in settings
-- Verify `getTextForAI()` function is being called correctly
+- Try with a smaller page or navigate to a specific page

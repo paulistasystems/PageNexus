@@ -143,58 +143,7 @@
     window.location.reload();
   }
 
-  /**
-   * Função global para obter texto preparado para IA nativa do Firefox
-   * Esta função pode ser chamada pela IA nativa ou por outros scripts
-   * @returns {Promise<string>} - Texto limitado e formatado pronto para IA
-   */
-  window.getTextForAI = async function () {
-    try {
-      // Obtém configuração de limite
-      const result = await browser.storage.local.get("maxCharsForAI");
-      const maxCharsForAI = result.maxCharsForAI || DEFAULT_MAX_CHARS_FOR_AI;
 
-      // Extrai conteúdo usando Readability
-      const documentClone = document.cloneNode(true);
-      const article = new Readability(documentClone).parse();
-
-      if (!article || !article.content) {
-        console.log("[PageNexus] Readability não conseguiu extrair o artigo.");
-        // Fallback: retorna texto da página limitado
-        const pageText = document.body.innerText || document.body.textContent || '';
-        const limited = window.TextLimiter.truncateText(pageText, maxCharsForAI);
-
-        alert(`⚠️ PageNexus: Artigo não extraído\n\nUsando texto da página.\n\nOriginal: ${pageText.length.toLocaleString()} caracteres\nLimitado: ${limited.length.toLocaleString()} caracteres\nLimite: ${maxCharsForAI.toLocaleString()} caracteres`);
-
-        return limited;
-      }
-
-      // Usa TextLimiter para preparar texto
-      const preparedText = window.TextLimiter.prepareForAI(article, maxCharsForAI);
-      const originalLength = article.textContent ? article.textContent.length : article.length;
-      const wasLimited = preparedText.length < originalLength;
-
-      console.log(`[PageNexus] Texto preparado para IA: ${preparedText.length} caracteres (limite: ${maxCharsForAI})`);
-
-      // Alert com informações detalhadas
-      if (wasLimited) {
-        alert(`✂️ PageNexus: Texto limitado\n\n📄 Original: ${originalLength.toLocaleString()} caracteres\n✅ Limitado: ${preparedText.length.toLocaleString()} caracteres\n⚙️ Limite configurado: ${maxCharsForAI.toLocaleString()} caracteres\n\n${Math.round((preparedText.length / originalLength) * 100)}% do texto original mantido.`);
-      } else {
-        alert(`✅ PageNexus: Texto completo\n\n📄 Tamanho: ${preparedText.length.toLocaleString()} caracteres\n⚙️ Limite: ${maxCharsForAI.toLocaleString()} caracteres\n\nTexto está dentro do limite, nenhum corte necessário.`);
-      }
-
-      return preparedText;
-    } catch (error) {
-      console.error(`[PageNexus] Erro ao preparar texto para IA: ${error}`);
-      // Fallback: retorna texto da página limitado
-      const pageText = document.body.innerText || document.body.textContent || '';
-      const limited = window.TextLimiter.truncateText(pageText, DEFAULT_MAX_CHARS_FOR_AI);
-
-      alert(`❌ PageNexus: Erro\n\n${error.message}\n\nUsando fallback.\n\nLimitado: ${limited.length.toLocaleString()} caracteres`);
-
-      return limited;
-    }
-  };
 
   function init() {
     // Obtém configuração de limite para IA (também usado para paginação)
