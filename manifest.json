@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "PageNexus",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Apresenta artigos em um 'Modo de Leitura' paginado para melhorar a legibilidade.",
   "permissions": [
     "storage",
@@ -40,7 +40,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "pagenexus@paulista.systems",
+      "id": "pagenexus@paulista.dev",
       "data_collection_permissions": {
         "required": [
           "none"
