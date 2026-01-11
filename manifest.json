@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "PageNexus",
   "version": "0.2.1",
-  "description": "Apresenta artigos em um 'Modo de Leitura' paginado para melhorar a legibilidade.",
+  "description": "Paginates long articles using Readability.js, optimizing content for Firefox's AI sidebar.",
   "permissions": [
     "storage",
     "tabs"
