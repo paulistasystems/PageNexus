@@ -14,3 +14,4 @@ Thumbs.db
 
 # Node modules (if used for build)
 node_modules/
+*.zip
