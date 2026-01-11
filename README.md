@@ -4,6 +4,16 @@
 
 This extension reduces page context for use with Firefox's AI sidebar.
 
+## 2. Build
+
+To generate the ZIP file for submission to Mozilla Add-ons:
+
+```bash
+./build.sh
+```
+
+This will create a `pagenexus-vX.X.X.zip` file ready for upload.
+
 ## 2. Functional Requirements
 
 ### 2.1. Main Content Extraction
