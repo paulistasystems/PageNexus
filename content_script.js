@@ -164,6 +164,106 @@
     document.querySelectorAll('#pagenexus-restore').forEach(btn => btn.addEventListener('click', restoreOriginal));
 
     window.scrollTo(0, 0);
+
+    // Copia automaticamente o conteúdo da página para a área de transferência
+    copyPageToClipboard();
+  }
+
+  /**
+   * Copia o conteúdo da página atual para a área de transferência
+   */
+  async function copyPageToClipboard() {
+    const contentDiv = document.getElementById('pagenexus-content');
+    console.log('[PageNexus] Tentando copiar conteúdo...');
+
+    if (!contentDiv) {
+      console.error('[PageNexus] Elemento pagenexus-content não encontrado!');
+      return;
+    }
+
+    const text = contentDiv.textContent.trim();
+    console.log(`[PageNexus] Texto a copiar: ${text.length} caracteres`);
+
+    try {
+      // Tenta usar a API moderna de clipboard
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        console.log(`[PageNexus] ✅ Página ${currentPage + 1} copiada via Clipboard API`);
+        showCopyFeedback();
+      } else {
+        // Fallback para execCommand
+        copyUsingExecCommand(text);
+      }
+    } catch (error) {
+      console.warn('[PageNexus] Clipboard API falhou, tentando fallback:', error);
+      // Fallback para execCommand
+      copyUsingExecCommand(text);
+    }
+  }
+
+  /**
+   * Fallback para copiar usando execCommand (para browsers mais antigos ou sem permissão)
+   */
+  function copyUsingExecCommand(text) {
+    try {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      textArea.style.top = '0';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textArea);
+
+      if (successful) {
+        console.log(`[PageNexus] ✅ Página ${currentPage + 1} copiada via execCommand`);
+        showCopyFeedback();
+      } else {
+        console.error('[PageNexus] ❌ execCommand retornou false');
+      }
+    } catch (error) {
+      console.error('[PageNexus] ❌ Erro ao copiar com execCommand:', error);
+    }
+  }
+
+  /**
+   * Mostra toast visual de que a página foi copiada
+   */
+  function showCopyFeedback() {
+    // Remove toast anterior se existir
+    const existingFeedback = document.getElementById('pagenexus-copy-feedback');
+    if (existingFeedback) {
+      existingFeedback.remove();
+    }
+
+    const feedback = document.createElement('div');
+    feedback.id = 'pagenexus-copy-feedback';
+    feedback.textContent = `📋 Página ${currentPage + 1} copiada!`;
+    feedback.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 10000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    `;
+
+    document.body.appendChild(feedback);
+
+    // Remove após 2 segundos
+    setTimeout(() => {
+      feedback.style.opacity = '0';
+      feedback.style.transition = 'opacity 0.3s ease';
+      setTimeout(() => feedback.remove(), 300);
+    }, 2000);
   }
 
   function nextPage() {

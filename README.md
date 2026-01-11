@@ -11,6 +11,7 @@ PageNexus extracts and paginates web articles using Mozilla's Readability.js lib
 **Key Features:**
 - **Smart Content Extraction:** Uses Readability.js to extract the main article, removing ads, sidebars, and other distractions.
 - **Intelligent Pagination:** Divides long content into manageable pages while respecting HTML element boundaries (paragraphs, headings).
+- **Auto-Copy to Clipboard:** Automatically copies the current page content to the clipboard when navigating between pages, making it easy to paste into AI assistants.
 - **AI Sidebar Optimization:** Limits content sent to Firefox's native AI, preventing 400 errors on large pages.
 - **Clean Reading Format:** Displays content with readable styling—serif font, good spacing, single-column layout.
 - **Easy Navigation:** Simple "Next Page" and "Previous Page" buttons, plus an option to restore the original view.
