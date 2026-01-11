@@ -18,24 +18,24 @@ const TextLimiter = {
     // Tenta truncar mantendo parágrafos completos
     const paragraphs = text.split(/\n\n+/);
     let result = '';
-    
+
     for (const paragraph of paragraphs) {
       const trimmedParagraph = paragraph.trim();
-      
+
       // Se adicionar este parágrafo ultrapassar o limite
       if (result.length + trimmedParagraph.length + 2 > maxChars) {
         // Se já temos algum conteúdo, retorna o que temos
         if (result.length > 0) {
           return result.trim() + '\n\n[...conteúdo truncado...]';
         }
-        
+
         // Se nem o primeiro parágrafo cabe, trunca ele
         return trimmedParagraph.substring(0, maxChars - 30) + '...\n\n[...conteúdo truncado...]';
       }
-      
+
       result += trimmedParagraph + '\n\n';
     }
-    
+
     return result.trim();
   },
 
@@ -46,21 +46,21 @@ const TextLimiter = {
    * @returns {string} - HTML truncado
    */
   truncateHTML(html, maxChars) {
-    // Cria um elemento temporário para extrair texto
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    
+    // Usa DOMParser para parse seguro de HTML
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
     // Extrai texto puro
-    const text = tempDiv.textContent || tempDiv.innerText || '';
-    
+    const text = doc.body.textContent || doc.body.innerText || '';
+
     // Se o texto já está dentro do limite, retorna o HTML original
     if (text.length <= maxChars) {
       return html;
     }
-    
+
     // Trunca o texto
     const truncatedText = this.truncateText(text, maxChars);
-    
+
     // Retorna o texto truncado (sem HTML para simplificar)
     return truncatedText;
   },
@@ -78,36 +78,37 @@ const TextLimiter = {
 
     // Usa textContent se disponível, senão extrai do HTML
     let text = article.textContent || '';
-    
+
     if (!text && article.content) {
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = article.content;
-      text = tempDiv.textContent || tempDiv.innerText || '';
+      // Usa DOMParser para parse seguro de HTML
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(article.content, 'text/html');
+      text = doc.body.textContent || doc.body.innerText || '';
     }
 
     // Adiciona título e byline se disponíveis
     let result = '';
-    
+
     if (article.title) {
       result += `Título: ${article.title}\n\n`;
     }
-    
+
     if (article.byline) {
       result += `Autor: ${article.byline}\n\n`;
     }
-    
+
     // Calcula quanto espaço resta para o conteúdo
     const remainingChars = maxChars - result.length;
-    
+
     if (remainingChars <= 0) {
       // Se título e byline já ultrapassaram o limite, trunca só o título
       return this.truncateText(article.title || text, maxChars);
     }
-    
+
     // Trunca o conteúdo
     const truncatedContent = this.truncateText(text, remainingChars);
     result += truncatedContent;
-    
+
     return result;
   }
 };

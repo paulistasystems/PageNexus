@@ -91,32 +91,73 @@
     console.log("[PageNexus] Exibindo página", currentPage + 1, "de", pages.length);
     console.log("[PageNexus] Fragmento tem", pageFragment.childNodes.length, "nós filhos");
 
-    document.body.innerHTML = `
-      <div id="pagenexus-container">
-        <header id="pagenexus-header">
-          <h1>${articleTitle}</h1>
-          <p>${articleByline || ''}</p>
-        </header>
-        <div id="pagenexus-nav-top"></div>
-        <div id="pagenexus-content"></div>
-        <div id="pagenexus-nav-bottom"></div>
-      </div>
-    `;
+    // Limpa o body de forma segura
+    while (document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild);
+    }
 
-    document.getElementById('pagenexus-content').appendChild(pageFragment.cloneNode(true));
+    // Cria estrutura do container usando DOM API
+    const container = document.createElement('div');
+    container.id = 'pagenexus-container';
 
-    const navTop = document.getElementById('pagenexus-nav-top');
-    const navBottom = document.getElementById('pagenexus-nav-bottom');
+    const header = document.createElement('header');
+    header.id = 'pagenexus-header';
+    const h1 = document.createElement('h1');
+    h1.textContent = articleTitle;
+    const bylineP = document.createElement('p');
+    bylineP.textContent = articleByline || '';
+    header.appendChild(h1);
+    header.appendChild(bylineP);
 
-    const navigationHTML = `
-      <button id="pagenexus-prev" ${currentPage === 0 ? 'disabled' : ''}>&laquo; Anterior</button>
-      <span>Página ${currentPage + 1} de ${pages.length}</span>
-      <button id="pagenexus-next" ${currentPage >= pages.length - 1 ? 'disabled' : ''}>Próxima &raquo;</button>
-      <button id="pagenexus-restore">Restaurar Original</button>
-    `;
+    const navTop = document.createElement('div');
+    navTop.id = 'pagenexus-nav-top';
+    const contentDiv = document.createElement('div');
+    contentDiv.id = 'pagenexus-content';
+    const navBottom = document.createElement('div');
+    navBottom.id = 'pagenexus-nav-bottom';
 
-    navTop.innerHTML = navigationHTML;
-    navBottom.innerHTML = navigationHTML;
+    container.appendChild(header);
+    container.appendChild(navTop);
+    container.appendChild(contentDiv);
+    container.appendChild(navBottom);
+    document.body.appendChild(container);
+
+    contentDiv.appendChild(pageFragment.cloneNode(true));
+
+    // Função helper para criar navegação de forma segura
+    function createNavigation() {
+      const nav = document.createDocumentFragment();
+
+      const prevBtn = document.createElement('button');
+      prevBtn.id = 'pagenexus-prev';
+      prevBtn.textContent = '« Anterior';
+      prevBtn.disabled = currentPage === 0;
+      prevBtn.addEventListener('click', prevPage);
+
+      const pageSpan = document.createElement('span');
+      pageSpan.textContent = `Página ${currentPage + 1} de ${pages.length}`;
+
+      const nextBtn = document.createElement('button');
+      nextBtn.id = 'pagenexus-next';
+      nextBtn.textContent = 'Próxima »';
+      nextBtn.disabled = currentPage >= pages.length - 1;
+      nextBtn.addEventListener('click', nextPage);
+
+      const restoreBtn = document.createElement('button');
+      restoreBtn.id = 'pagenexus-restore';
+      restoreBtn.textContent = 'Restaurar Original';
+      restoreBtn.addEventListener('click', restoreOriginal);
+
+      nav.appendChild(prevBtn);
+      nav.appendChild(pageSpan);
+      nav.appendChild(nextBtn);
+      nav.appendChild(restoreBtn);
+
+      return nav;
+    }
+
+    navTop.appendChild(createNavigation());
+    navBottom.appendChild(createNavigation());
 
     document.querySelectorAll('#pagenexus-prev').forEach(btn => btn.addEventListener('click', prevPage));
     document.querySelectorAll('#pagenexus-next').forEach(btn => btn.addEventListener('click', nextPage));
@@ -174,8 +215,13 @@
       articleTitle = article.title;
       articleByline = article.byline;
 
+      // Parse do conteúdo usando DOMParser (mais seguro que innerHTML)
+      const parser = new DOMParser();
+      const parsedDoc = parser.parseFromString(article.content, 'text/html');
       const readerContentDiv = document.createElement('div');
-      readerContentDiv.innerHTML = article.content;
+      while (parsedDoc.body.firstChild) {
+        readerContentDiv.appendChild(parsedDoc.body.firstChild);
+      }
 
       const allNodes = collectNodes(readerContentDiv);
       const totalTextLength = article.length;
