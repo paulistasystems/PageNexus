@@ -1,5 +1,28 @@
 # PageNexus - Smart Pagination Extension
 
+## Extension Submission Info
+
+### Summary (max 250 characters)
+Paginates long articles using Readability.js, optimizing content for Firefox's AI sidebar by reducing page context and preventing AI character limit errors.
+
+### Description
+PageNexus extracts and paginates web articles using Mozilla's Readability.js library, providing a clean, distraction-free reading experience.
+
+**Key Features:**
+- **Smart Content Extraction:** Uses Readability.js to extract the main article, removing ads, sidebars, and other distractions.
+- **Intelligent Pagination:** Divides long content into manageable pages while respecting HTML element boundaries (paragraphs, headings).
+- **AI Sidebar Optimization:** Limits content sent to Firefox's native AI, preventing 400 errors on large pages.
+- **Clean Reading Format:** Displays content with readable styling—serif font, good spacing, single-column layout.
+- **Easy Navigation:** Simple "Next Page" and "Previous Page" buttons, plus an option to restore the original view.
+
+**Configurable Settings:**
+- Characters per page (default: 2500)
+- AI character limit (default: 10,000)
+
+Perfect for users who want to summarize long articles using Firefox's AI sidebar without running into character limit issues.
+
+---
+
 ## 1. Purpose
 
 This extension reduces page context for use with Firefox's AI sidebar.
