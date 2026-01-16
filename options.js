@@ -31,6 +31,7 @@ function showStatus(message) {
 // Salva configurações automaticamente
 function saveSettings() {
   const selectedLLM = document.getElementById('llmPreset').value;
+  const autoCopyToClipboard = document.getElementById('autoCopyToClipboard').checked;
 
   // Coleta todos os limites customizados
   const limits = {};
@@ -45,19 +46,24 @@ function saveSettings() {
   browser.storage.local.set({
     selectedLLM,
     llmLimits: limits,
-    maxCharsForAI
+    maxCharsForAI,
+    autoCopyToClipboard
   }).then(() => {
-    console.log(`[PageNexus] Configurações salvas: ${selectedLLM} = ${maxCharsForAI.toLocaleString()} caracteres`);
+    console.log(`[PageNexus] Configurações salvas: ${selectedLLM} = ${maxCharsForAI.toLocaleString()} caracteres, autoCopy: ${autoCopyToClipboard}`);
     showStatus('✓ Salvo');
   });
 }
 
 // Restaura opções ao carregar a página
 function restoreOptions() {
-  browser.storage.local.get(['selectedLLM', 'llmLimits', 'maxCharsForAI']).then((result) => {
+  browser.storage.local.get(['selectedLLM', 'llmLimits', 'maxCharsForAI', 'autoCopyToClipboard']).then((result) => {
     // Restaura o LLM selecionado
     const selectedLLM = result.selectedLLM || 'chatgpt';
     document.getElementById('llmPreset').value = selectedLLM;
+
+    // Restaura a configuração de cópia automática (padrão: desativado)
+    const autoCopyToClipboard = result.autoCopyToClipboard === true;
+    document.getElementById('autoCopyToClipboard').checked = autoCopyToClipboard;
 
     // Restaura os limites customizados
     const limits = result.llmLimits || DEFAULT_LIMITS;
@@ -67,7 +73,7 @@ function restoreOptions() {
       input.value = limits[llmKey] || DEFAULT_LIMITS[llmKey];
     }
 
-    console.log(`[PageNexus] Configurações carregadas: ${selectedLLM}`);
+    console.log(`[PageNexus] Configurações carregadas: ${selectedLLM}, autoCopy: ${autoCopyToClipboard}`);
   }).catch((error) => {
     console.log(`[PageNexus] Erro ao carregar: ${error}`);
   });
@@ -75,6 +81,7 @@ function restoreOptions() {
 
 // Event listeners
 document.getElementById('llmPreset').addEventListener('change', saveSettings);
+document.getElementById('autoCopyToClipboard').addEventListener('change', saveSettings);
 
 // Adiciona listeners para todos os inputs de limite
 for (const inputId of Object.keys(LIMIT_INPUTS)) {

@@ -173,6 +173,15 @@
    * Copia o conteúdo da página atual para a área de transferência
    */
   async function copyPageToClipboard() {
+    // Verifica se a cópia automática está ativada
+    const settings = await browser.storage.local.get('autoCopyToClipboard');
+    const autoCopyEnabled = settings.autoCopyToClipboard === true; // Padrão: desativado
+
+    if (!autoCopyEnabled) {
+      console.log('[PageNexus] Cópia automática desativada nas preferências');
+      return;
+    }
+
     const contentDiv = document.getElementById('pagenexus-content');
     console.log('[PageNexus] Tentando copiar conteúdo...');
 

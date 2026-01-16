@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "PageNexus",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Paginates long articles using Readability.js, optimizing content for Firefox's AI sidebar.",
   "permissions": [
     "storage",
