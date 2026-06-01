@@ -80,7 +80,7 @@ async function saveSettings() {
 async function restoreOptions() {
   const result = await browser.storage.local.get(['selectedLLM', 'llmLimits', 'maxCharsForAI', 'autoCopyToClipboard', 'language']);
 
-  const language = result.language || 'en';
+  const language = result.language || I18n._detectBrowserLocale();
   document.getElementById('language').value = language;
   await I18n.setLocale(language);
   applyTranslations();

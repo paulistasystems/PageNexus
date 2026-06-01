@@ -21,12 +21,11 @@ browser.runtime.onInstalled.addListener((details) => {
         const selectedLLM = 'chatgpt';
         const maxCharsForAI = DEFAULT_LIMITS[selectedLLM];
 
-      browser.storage.local.set({
-        selectedLLM,
-        llmLimits: DEFAULT_LIMITS,
-        maxCharsForAI,
-        language: 'en'
-      }).then(() => {
+    browser.storage.local.set({
+      selectedLLM,
+      llmLimits: DEFAULT_LIMITS,
+      maxCharsForAI
+    }).then(() => {
             console.log(`[PageNexus Background] Configurações padrão salvas: ${selectedLLM} = ${maxCharsForAI.toLocaleString()} caracteres`);
 
             // Abre a página de opções

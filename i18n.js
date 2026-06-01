@@ -2,9 +2,21 @@ const I18n = {
   _locale: null,
   _messages: {},
 
+  _supportedLocales: ['en', 'pt_BR'],
+
+  _detectBrowserLocale() {
+    const uiLang = browser.i18n.getUILanguage().replace('-', '_');
+    if (this._supportedLocales.includes(uiLang)) {
+      return uiLang;
+    }
+    const baseLang = uiLang.split('_')[0];
+    const match = this._supportedLocales.find(loc => loc.split('_')[0] === baseLang);
+    return match || 'en';
+  },
+
   async init() {
     const result = await browser.storage.local.get('language');
-    this._locale = result.language || browser.i18n.getUILanguage().replace('-', '_') || 'en';
+    this._locale = result.language || this._detectBrowserLocale();
     this._messages = {};
   },
 

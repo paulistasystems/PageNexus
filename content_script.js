@@ -184,16 +184,26 @@
       return;
     }
 
-    const contentDiv = document.getElementById('pagenexus-content');
-    console.log('[PageNexus] Tentando copiar conteúdo...');
+  const contentDiv = document.getElementById('pagenexus-content');
+  console.log('[PageNexus] Tentando copiar conteúdo...');
 
-    if (!contentDiv) {
-      console.error('[PageNexus] Elemento pagenexus-content não encontrado!');
-      return;
-    }
+  if (!contentDiv) {
+    console.error('[PageNexus] Elemento pagenexus-content não encontrado!');
+    return;
+  }
 
-    const text = contentDiv.textContent.trim();
-    console.log(`[PageNexus] Texto a copiar: ${text.length} caracteres`);
+  let text = '';
+  if (articleTitle) {
+    text += articleTitle + '\n';
+  }
+  if (articleByline) {
+    text += articleByline + '\n';
+  }
+  if (articleTitle || articleByline) {
+    text += '\n';
+  }
+  text += contentDiv.textContent.trim();
+  console.log(`[PageNexus] Texto a copiar: ${text.length} caracteres`);
 
     try {
       // Tenta usar a API moderna de clipboard

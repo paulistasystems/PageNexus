@@ -2,6 +2,10 @@
 
 ## ✅ Recently Completed
 
+### v0.4.1 - Bug Fixes
+- [x] **Browser language detection** - Automatically detect and use browser language on first install (Portuguese for pt-BR browsers, English fallback)
+- [x] **Incomplete text copy** - Include article title and byline in clipboard text when auto-copying
+
 ### v0.4.0 - Internationalization (i18n)
 - [x] Implement multi-language support with English as the default fallback language
 - [x] Add Portuguese (Brasil) language support
