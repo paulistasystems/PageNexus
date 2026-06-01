@@ -2,6 +2,9 @@
 
 ## ✅ Recently Completed
 
+### v0.4.2 - Bug Fixes
+- [x] **Auto-copy not working on activation** - Fixed clipboard copy failing silently when reader mode is activated from the toolbar button (document not focused). Copy now refocuses the page and, as a last resort, copies on the user's first interaction with the page.
+
 ### v0.4.1 - Bug Fixes
 - [x] **Browser language detection** - Automatically detect and use browser language on first install (Portuguese for pt-BR browsers, English fallback)
 - [x] **Incomplete text copy** - Include article title and byline in clipboard text when auto-copying

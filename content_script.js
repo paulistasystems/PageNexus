@@ -205,25 +205,61 @@
   text += contentDiv.textContent.trim();
   console.log(`[PageNexus] Texto a copiar: ${text.length} caracteres`);
 
-    try {
-      // Tenta usar a API moderna de clipboard
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(text);
-        console.log(`[PageNexus] ✅ Página ${currentPage + 1} copiada via Clipboard API`);
-        showCopyFeedback();
-      } else {
-        // Fallback para execCommand
-        copyUsingExecCommand(text);
-      }
-    } catch (error) {
-      console.warn('[PageNexus] Clipboard API falhou, tentando fallback:', error);
-      // Fallback para execCommand
-      copyUsingExecCommand(text);
-    }
+    await doCopy(text);
   }
 
   /**
-   * Fallback para copiar usando execCommand (para browsers mais antigos ou sem permissão)
+   * Tenta copiar o texto para a área de transferência.
+   *
+   * As duas formas de copiar (Clipboard API e execCommand) exigem que o
+   * documento esteja em foco. Quando o modo de leitura é ativado pelo botão da
+   * extensão, o foco está na barra do navegador, e não na página, então a cópia
+   * falha silenciosamente. Por isso, tentamos trazer o foco de volta e, se ainda
+   * assim não houver foco, copiamos na primeira interação do usuário com a página.
+   */
+  async function doCopy(text) {
+    try { window.focus(); } catch (e) { /* ignora */ }
+
+    if (document.hasFocus() && navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        console.log(`[PageNexus] ✅ Página ${currentPage + 1} copiada via Clipboard API`);
+        showCopyFeedback();
+        return;
+      } catch (error) {
+        console.warn('[PageNexus] Clipboard API falhou, tentando fallback:', error);
+      }
+    }
+
+    // Fallback para execCommand (browsers antigos ou quando a Clipboard API falha)
+    if (copyUsingExecCommand(text)) {
+      return;
+    }
+
+    // Se nada funcionou (normalmente porque a página ainda não tem foco), copia
+    // assim que o usuário interagir com a página pela primeira vez.
+    console.log('[PageNexus] Documento sem foco; aguardando interação do usuário para copiar.');
+    scheduleCopyOnInteraction(text);
+  }
+
+  /**
+   * Agenda a cópia para a próxima interação do usuário com a página, garantindo
+   * que o documento tenha foco no momento da cópia.
+   */
+  function scheduleCopyOnInteraction(text) {
+    const events = ['focus', 'pointerdown', 'keydown'];
+
+    const handler = () => {
+      events.forEach(evt => window.removeEventListener(evt, handler, true));
+      doCopy(text);
+    };
+
+    events.forEach(evt => window.addEventListener(evt, handler, true));
+  }
+
+  /**
+   * Fallback para copiar usando execCommand (para browsers mais antigos ou sem permissão).
+   * Retorna true se a cópia foi bem-sucedida.
    */
   function copyUsingExecCommand(text) {
     try {
@@ -242,11 +278,14 @@
       if (successful) {
         console.log(`[PageNexus] ✅ Página ${currentPage + 1} copiada via execCommand`);
         showCopyFeedback();
-      } else {
-        console.error('[PageNexus] ❌ execCommand retornou false');
+        return true;
       }
+
+      console.error('[PageNexus] ❌ execCommand retornou false');
+      return false;
     } catch (error) {
       console.error('[PageNexus] ❌ Erro ao copiar com execCommand:', error);
+      return false;
     }
   }
 
