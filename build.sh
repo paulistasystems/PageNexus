@@ -30,16 +30,18 @@ fi
 
 # Arquivos a serem incluídos
 FILES=(
-    "manifest.json"
-    "background.js"
-    "content_script.js"
-    "Readability.js"
-    "text_limiter.js"
-    "options.html"
-    "options.js"
-    "options.css"
-    "reader.css"
-    "icons/"
+  "manifest.json"
+  "background.js"
+  "content_script.js"
+  "Readability.js"
+  "text_limiter.js"
+  "i18n.js"
+  "options.html"
+  "options.js"
+  "options.css"
+  "reader.css"
+  "icons/"
+  "_locales/"
 )
 
 echo -e "${YELLOW}Criando arquivo ZIP...${NC}"

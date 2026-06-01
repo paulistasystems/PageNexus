@@ -1,0 +1,71 @@
+{
+  "extensionName": {
+    "message": "PageNexus"
+  },
+  "extensionDescription": {
+    "message": "Pagina artigos longos usando Readability.js, otimizando conteúdo para a barra lateral de IA do Firefox."
+  },
+  "browserActionTitle": {
+    "message": "Ativar PageNexus - Modo de Leitura"
+  },
+  "btnPrevious": {
+    "message": "« Anterior"
+  },
+  "btnNext": {
+    "message": "Próxima »"
+  },
+  "btnRestore": {
+    "message": "Restaurar Original"
+  },
+  "pageIndicator": {
+    "message": "Página $1 de $2"
+  },
+  "copyFeedback": {
+    "message": "📋 Página $1 copiada!"
+  },
+  "extractionError": {
+    "message": "❌ PageNexus: Não foi possível extrair o artigo desta página.\n\nTente com outra página (ex: artigos da Wikipedia)."
+  },
+  "truncatedContent": {
+    "message": "[...conteúdo truncado...]"
+  },
+  "titleLabel": {
+    "message": "Título:"
+  },
+  "authorLabel": {
+    "message": "Autor:"
+  },
+  "optionsActiveAI": {
+    "message": "IA ativa (para barra lateral do Firefox):"
+  },
+  "optionsSelectAI": {
+    "message": "Selecione a IA que você usa na barra lateral"
+  },
+  "optionsAutoCopy": {
+    "message": "Copiar automaticamente para a área de transferência"
+  },
+  "optionsAutoCopyHint": {
+    "message": "Copia o conteúdo da página atual ao navegar entre páginas"
+  },
+  "optionsCharLimits": {
+    "message": "Limites de caracteres por IA"
+  },
+  "optionsCharLimitsHint": {
+    "message": "Personalize os limites para cada IA conforme sua necessidade"
+  },
+  "optionsCharacters": {
+    "message": "caracteres"
+  },
+  "optionsCustom": {
+    "message": "Personalizado"
+  },
+  "optionsSaved": {
+    "message": "✓ Salvo"
+  },
+  "optionsLanguage": {
+    "message": "Idioma:"
+  },
+  "optionsLanguageHint": {
+    "message": "Escolha o idioma de exibição da extensão"
+  }
+}

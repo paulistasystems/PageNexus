@@ -26,11 +26,11 @@ const TextLimiter = {
       if (result.length + trimmedParagraph.length + 2 > maxChars) {
         // Se já temos algum conteúdo, retorna o que temos
         if (result.length > 0) {
-          return result.trim() + '\n\n[...conteúdo truncado...]';
+          return result.trim() + '\n\n' + (typeof I18n !== 'undefined' ? I18n.getMessage('truncatedContent') : '[...conteúdo truncado...]');
         }
 
         // Se nem o primeiro parágrafo cabe, trunca ele
-        return trimmedParagraph.substring(0, maxChars - 30) + '...\n\n[...conteúdo truncado...]';
+        return trimmedParagraph.substring(0, maxChars - 30) + '...\n\n' + (typeof I18n !== 'undefined' ? I18n.getMessage('truncatedContent') : '[...conteúdo truncado...]');
       }
 
       result += trimmedParagraph + '\n\n';
@@ -90,11 +90,11 @@ const TextLimiter = {
     let result = '';
 
     if (article.title) {
-      result += `Título: ${article.title}\n\n`;
+      result += (typeof I18n !== 'undefined' ? I18n.getMessage('titleLabel') : 'Título:') + ` ${article.title}\n\n`;
     }
 
     if (article.byline) {
-      result += `Autor: ${article.byline}\n\n`;
+      result += (typeof I18n !== 'undefined' ? I18n.getMessage('authorLabel') : 'Autor:') + ` ${article.byline}\n\n`;
     }
 
     // Calcula quanto espaço resta para o conteúdo

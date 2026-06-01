@@ -1,0 +1,71 @@
+{
+  "extensionName": {
+    "message": "PageNexus"
+  },
+  "extensionDescription": {
+    "message": "Paginates long articles using Readability.js, optimizing content for Firefox's AI sidebar."
+  },
+  "browserActionTitle": {
+    "message": "Activate PageNexus - Reading Mode"
+  },
+  "btnPrevious": {
+    "message": "« Previous"
+  },
+  "btnNext": {
+    "message": "Next »"
+  },
+  "btnRestore": {
+    "message": "Restore Original"
+  },
+  "pageIndicator": {
+    "message": "Page $1 of $2"
+  },
+  "copyFeedback": {
+    "message": "📋 Page $1 copied!"
+  },
+  "extractionError": {
+    "message": "❌ PageNexus: Could not extract the article from this page.\n\nTry with another page (e.g.: Wikipedia articles)."
+  },
+  "truncatedContent": {
+    "message": "[...truncated content...]"
+  },
+  "titleLabel": {
+    "message": "Title:"
+  },
+  "authorLabel": {
+    "message": "Author:"
+  },
+  "optionsActiveAI": {
+    "message": "Active AI (for Firefox sidebar):"
+  },
+  "optionsSelectAI": {
+    "message": "Select the AI you use in the sidebar"
+  },
+  "optionsAutoCopy": {
+    "message": "Automatically copy to clipboard"
+  },
+  "optionsAutoCopyHint": {
+    "message": "Copies the current page content when navigating between pages"
+  },
+  "optionsCharLimits": {
+    "message": "Character limits per AI"
+  },
+  "optionsCharLimitsHint": {
+    "message": "Customize the limits for each AI according to your needs"
+  },
+  "optionsCharacters": {
+    "message": "characters"
+  },
+  "optionsCustom": {
+    "message": "Custom"
+  },
+  "optionsSaved": {
+    "message": "✓ Saved"
+  },
+  "optionsLanguage": {
+    "message": "Language:"
+  },
+  "optionsLanguageHint": {
+    "message": "Choose the extension display language"
+  }
+}

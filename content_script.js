@@ -1,7 +1,9 @@
-(function () {
+(async function () {
   if (window.self !== window.top) {
     return;
   }
+
+  await I18n.init();
 
   const DEFAULT_CHARS_PER_PAGE = 2500;
   const DEFAULT_MAX_CHARS_FOR_AI = 10000;
@@ -130,22 +132,22 @@
 
       const prevBtn = document.createElement('button');
       prevBtn.id = 'pagenexus-prev';
-      prevBtn.textContent = '« Anterior';
+      prevBtn.textContent = I18n.getMessage('btnPrevious');
       prevBtn.disabled = currentPage === 0;
       prevBtn.addEventListener('click', prevPage);
 
       const pageSpan = document.createElement('span');
-      pageSpan.textContent = `Página ${currentPage + 1} de ${pages.length}`;
+      pageSpan.textContent = I18n.getMessage('pageIndicator', [currentPage + 1, pages.length]);
 
       const nextBtn = document.createElement('button');
       nextBtn.id = 'pagenexus-next';
-      nextBtn.textContent = 'Próxima »';
+      nextBtn.textContent = I18n.getMessage('btnNext');
       nextBtn.disabled = currentPage >= pages.length - 1;
       nextBtn.addEventListener('click', nextPage);
 
       const restoreBtn = document.createElement('button');
       restoreBtn.id = 'pagenexus-restore';
-      restoreBtn.textContent = 'Restaurar Original';
+      restoreBtn.textContent = I18n.getMessage('btnRestore');
       restoreBtn.addEventListener('click', restoreOriginal);
 
       nav.appendChild(prevBtn);
@@ -250,7 +252,7 @@
 
     const feedback = document.createElement('div');
     feedback.id = 'pagenexus-copy-feedback';
-    feedback.textContent = `📋 Página ${currentPage + 1} copiada!`;
+    feedback.textContent = I18n.getMessage('copyFeedback', currentPage + 1);
     feedback.style.cssText = `
       position: fixed;
       top: 20px;
@@ -317,7 +319,7 @@
 
       if (!article || !article.content) {
         console.log("[PageNexus] Readability não conseguiu extrair o artigo. Nenhuma ação necessária.");
-        alert("❌ PageNexus: Não foi possível extrair o artigo desta página.\n\nTente com outra página (ex: artigos da Wikipedia).");
+        alert(I18n.getMessage('extractionError'));
         return;
       }
 

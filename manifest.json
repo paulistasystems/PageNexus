@@ -1,8 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "PageNexus",
-  "version": "0.3.1",
-  "description": "Paginates long articles using Readability.js, optimizing content for Firefox's AI sidebar.",
+  "name": "__MSG_extensionName__",
+  "version": "0.4.0",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "en",
   "permissions": [
     "storage",
     "tabs",
@@ -13,18 +14,16 @@
       "matches": [
         "<all_urls>"
       ],
-      "js": [
-        "Readability.js",
-        "text_limiter.js",
-        "content_script.js"
-      ],
-      "css": [
-        "reader.css"
-      ]
+"js": [
+          "Readability.js",
+          "text_limiter.js",
+          "i18n.js",
+          "content_script.js"
+        ]
     }
   ],
   "browser_action": {
-    "default_title": "Ativar PageNexus - Modo de Leitura",
+    "default_title": "__MSG_browserActionTitle__",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png"

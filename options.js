@@ -1,4 +1,3 @@
-// Configuração padrão dos limites
 const DEFAULT_LIMITS = {
   chatgpt: 5000,
   copilot: 3000,
@@ -8,7 +7,6 @@ const DEFAULT_LIMITS = {
   custom: 10000
 };
 
-// Mapeamento dos IDs de input para as chaves
 const LIMIT_INPUTS = {
   limitChatgpt: 'chatgpt',
   limitCopilot: 'copilot',
@@ -18,7 +16,33 @@ const LIMIT_INPUTS = {
   limitCustom: 'custom'
 };
 
-// Mostra status de salvamento
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const message = I18n.getMessage(key);
+    if (message && message !== key) {
+      if (el.tagName === 'OPTION') {
+        el.textContent = message;
+      } else {
+        el.textContent = message;
+      }
+    }
+  });
+
+  document.querySelectorAll('[data-i18n-option]').forEach(el => {
+    const key = el.getAttribute('data-i18n-option');
+    const message = I18n.getMessage(key);
+    if (message && message !== key) {
+      el.textContent = message;
+    }
+  });
+
+  const customOption = document.querySelector('#llmPreset option[value="custom"]');
+  if (customOption) {
+    customOption.textContent = I18n.getMessage('optionsCustom');
+  }
+}
+
 function showStatus(message) {
   const status = document.getElementById('saveStatus');
   status.textContent = message;
@@ -28,62 +52,64 @@ function showStatus(message) {
   }, 2000);
 }
 
-// Salva configurações automaticamente
-function saveSettings() {
+async function saveSettings() {
   const selectedLLM = document.getElementById('llmPreset').value;
   const autoCopyToClipboard = document.getElementById('autoCopyToClipboard').checked;
+  const language = document.getElementById('language').value;
 
-  // Coleta todos os limites customizados
   const limits = {};
   for (const [inputId, llmKey] of Object.entries(LIMIT_INPUTS)) {
     const input = document.getElementById(inputId);
     limits[llmKey] = parseInt(input.value, 10) || DEFAULT_LIMITS[llmKey];
   }
 
-  // Calcula o maxCharsForAI baseado na seleção atual
   const maxCharsForAI = limits[selectedLLM];
 
-  browser.storage.local.set({
+  await browser.storage.local.set({
     selectedLLM,
     llmLimits: limits,
     maxCharsForAI,
-    autoCopyToClipboard
-  }).then(() => {
-    console.log(`[PageNexus] Configurações salvas: ${selectedLLM} = ${maxCharsForAI.toLocaleString()} caracteres, autoCopy: ${autoCopyToClipboard}`);
-    showStatus('✓ Salvo');
+    autoCopyToClipboard,
+    language
   });
+
+  console.log(`[PageNexus] Settings saved: ${selectedLLM} = ${maxCharsForAI.toLocaleString()} chars, autoCopy: ${autoCopyToClipboard}, language: ${language}`);
+  showStatus(I18n.getMessage('optionsSaved'));
 }
 
-// Restaura opções ao carregar a página
-function restoreOptions() {
-  browser.storage.local.get(['selectedLLM', 'llmLimits', 'maxCharsForAI', 'autoCopyToClipboard']).then((result) => {
-    // Restaura o LLM selecionado
-    const selectedLLM = result.selectedLLM || 'chatgpt';
-    document.getElementById('llmPreset').value = selectedLLM;
+async function restoreOptions() {
+  const result = await browser.storage.local.get(['selectedLLM', 'llmLimits', 'maxCharsForAI', 'autoCopyToClipboard', 'language']);
 
-    // Restaura a configuração de cópia automática (padrão: desativado)
-    const autoCopyToClipboard = result.autoCopyToClipboard === true;
-    document.getElementById('autoCopyToClipboard').checked = autoCopyToClipboard;
+  const language = result.language || 'en';
+  document.getElementById('language').value = language;
+  await I18n.setLocale(language);
+  applyTranslations();
 
-    // Restaura os limites customizados
-    const limits = result.llmLimits || DEFAULT_LIMITS;
+  const selectedLLM = result.selectedLLM || 'chatgpt';
+  document.getElementById('llmPreset').value = selectedLLM;
 
-    for (const [inputId, llmKey] of Object.entries(LIMIT_INPUTS)) {
-      const input = document.getElementById(inputId);
-      input.value = limits[llmKey] || DEFAULT_LIMITS[llmKey];
-    }
+  const autoCopyToClipboard = result.autoCopyToClipboard === true;
+  document.getElementById('autoCopyToClipboard').checked = autoCopyToClipboard;
 
-    console.log(`[PageNexus] Configurações carregadas: ${selectedLLM}, autoCopy: ${autoCopyToClipboard}`);
-  }).catch((error) => {
-    console.log(`[PageNexus] Erro ao carregar: ${error}`);
-  });
+  const limits = result.llmLimits || DEFAULT_LIMITS;
+
+  for (const [inputId, llmKey] of Object.entries(LIMIT_INPUTS)) {
+    const input = document.getElementById(inputId);
+    input.value = limits[llmKey] || DEFAULT_LIMITS[llmKey];
+  }
+
+  console.log(`[PageNexus] Settings loaded: ${selectedLLM}, autoCopy: ${autoCopyToClipboard}, language: ${language}`);
 }
 
-// Event listeners
 document.getElementById('llmPreset').addEventListener('change', saveSettings);
 document.getElementById('autoCopyToClipboard').addEventListener('change', saveSettings);
+document.getElementById('language').addEventListener('change', async () => {
+  const newLang = document.getElementById('language').value;
+  await I18n.setLocale(newLang);
+  applyTranslations();
+  saveSettings();
+});
 
-// Adiciona listeners para todos os inputs de limite
 for (const inputId of Object.keys(LIMIT_INPUTS)) {
   document.getElementById(inputId).addEventListener('change', saveSettings);
 }
