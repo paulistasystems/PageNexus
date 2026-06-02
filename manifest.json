@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "permissions": [
@@ -27,6 +27,13 @@
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png"
+    }
+  },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+E"
+      }
     }
   },
   "background": {

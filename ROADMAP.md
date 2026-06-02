@@ -2,6 +2,9 @@
 
 ## ✅ Recently Completed
 
+### v0.5.0 - Keyboard Shortcut
+- [x] **Toolbar shortcut** - Added `Ctrl+E` keyboard shortcut to toggle reader mode, firing the same action as the toolbar button (via the WebExtensions `_execute_browser_action` command).
+
 ### v0.4.2 - Bug Fixes
 - [x] **Auto-copy not working on activation** - Fixed clipboard copy failing silently when reader mode is activated from the toolbar button (document not focused). Copy now refocuses the page and, as a last resort, copies on the user's first interaction with the page.
 
@@ -32,4 +35,3 @@
 ## 🚀 Planned
 - Additional language support beyond English and Portuguese
 - Reader mode customization (font size, theme)
-- Keyboard shortcuts for page navigation

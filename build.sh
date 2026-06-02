@@ -20,7 +20,7 @@ VERSION=$(grep -o '"version": *"[^"]*"' manifest.json | cut -d'"' -f4)
 echo -e "${YELLOW}Versão detectada: ${VERSION}${NC}"
 
 # Nome do arquivo de saída
-OUTPUT_FILE="pagenexus-v${VERSION}.zip"
+OUTPUT_FILE="PageNexus-${VERSION}.zip"
 
 # Remove arquivo anterior se existir
 if [ -f "$OUTPUT_FILE" ]; then
@@ -28,26 +28,12 @@ if [ -f "$OUTPUT_FILE" ]; then
     rm "$OUTPUT_FILE"
 fi
 
-# Arquivos a serem incluídos
-FILES=(
-  "manifest.json"
-  "background.js"
-  "content_script.js"
-  "Readability.js"
-  "text_limiter.js"
-  "i18n.js"
-  "options.html"
-  "options.js"
-  "options.css"
-  "reader.css"
-  "icons/"
-  "_locales/"
-)
-
 echo -e "${YELLOW}Criando arquivo ZIP...${NC}"
 
-# Cria o ZIP
-zip -r "$OUTPUT_FILE" "${FILES[@]}" -x "*.DS_Store" -x "*__MACOSX*"
+# Cria o ZIP (exclui arquivos de desenvolvimento, conforme DEPLOY.md)
+zip -r "$OUTPUT_FILE" . \
+  -x "*.git*" "*.DS_Store*" "*__MACOSX*" "*.zip" "*.md" ".gitignore" \
+     "test.html" "deploy.sh" "build.sh" ".claude/*" "*.b64"
 
 # Verifica se o arquivo foi criado
 if [ -f "$OUTPUT_FILE" ]; then
