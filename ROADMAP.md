@@ -2,10 +2,10 @@
 
 ## ✅ Recently Completed
 
-### v0.5.0 - Close Tab After Copy, Context Menu Actions & Keyboard Shortcut
-- [x] **Close tab after copy** - New option that closes the current tab after content is copied to the clipboard
-- [x] **Remove Preferences from context menu** - Removed the Preferences tab from the extension's browser context menu (options still accessible via `options.html` directly)
+### v0.5.1 - Bulk Tab Context Menu Actions
 - [x] **Bulk tab context menu actions** - Added tab context menu items: Run on all tabs & close, Run on tabs to the right & close, Run on tabs to the left & close, Run on other tabs & close
+
+### v0.5.0 - Close Tab After Copy & Keyboard Shortcut
 - [x] **Toolbar shortcut** - Added `Ctrl+E` keyboard shortcut to toggle reader mode, firing the same action as the toolbar button (via the WebExtensions `_execute_browser_action` command)
 
 ### v0.4.2 - Bug Fixes
