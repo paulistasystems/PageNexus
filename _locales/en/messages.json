@@ -67,5 +67,23 @@
   },
   "optionsLanguageHint": {
     "message": "Choose the extension display language"
+  },
+  "optionsCloseTabAfterCopy": {
+    "message": "Close tab after copying"
+  },
+  "optionsCloseTabAfterCopyHint": {
+    "message": "Closes the current tab after the content is copied to the clipboard"
+  },
+  "contextMenuRunAllTabsClose": {
+    "message": "Run on all tabs & close"
+  },
+  "contextMenuRunTabsRightClose": {
+    "message": "Run on tabs to the right & close"
+  },
+  "contextMenuRunTabsLeftClose": {
+    "message": "Run on tabs to the left & close"
+  },
+  "contextMenuRunOtherTabsClose": {
+    "message": "Run on other tabs & close"
   }
 }

@@ -67,5 +67,23 @@
   },
   "optionsLanguageHint": {
     "message": "Escolha o idioma de exibição da extensão"
+  },
+  "optionsCloseTabAfterCopy": {
+    "message": "Fechar aba após copiar"
+  },
+  "optionsCloseTabAfterCopyHint": {
+    "message": "Fecha a aba atual após o conteúdo ser copiado para a área de transferência"
+  },
+  "contextMenuRunAllTabsClose": {
+    "message": "Executar em todas as abas & fechar"
+  },
+  "contextMenuRunTabsRightClose": {
+    "message": "Executar nas abas à direita & fechar"
+  },
+  "contextMenuRunTabsLeftClose": {
+    "message": "Executar nas abas à esquerda & fechar"
+  },
+  "contextMenuRunOtherTabsClose": {
+    "message": "Executar nas outras abas & fechar"
   }
 }

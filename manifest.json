@@ -7,7 +7,8 @@
   "permissions": [
     "storage",
     "tabs",
-    "clipboardWrite"
+    "clipboardWrite",
+    "contextMenus"
   ],
   "content_scripts": [
     {
@@ -40,10 +41,6 @@
     "scripts": [
       "background.js"
     ]
-  },
-  "options_ui": {
-    "page": "options.html",
-    "browser_style": true
   },
   "browser_specific_settings": {
     "gecko": {

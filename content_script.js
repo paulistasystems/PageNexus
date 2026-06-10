@@ -174,15 +174,15 @@
   /**
    * Copia o conteúdo da página atual para a área de transferência
    */
-  async function copyPageToClipboard() {
-    // Verifica se a cópia automática está ativada
-    const settings = await browser.storage.local.get('autoCopyToClipboard');
-    const autoCopyEnabled = settings.autoCopyToClipboard === true; // Padrão: desativado
+async function copyPageToClipboard() {
+  const settings = await browser.storage.local.get(['autoCopyToClipboard', 'closeTabAfterCopy']);
+  const autoCopyEnabled = settings.autoCopyToClipboard === true;
+  const closeTabEnabled = settings.closeTabAfterCopy === true;
 
-    if (!autoCopyEnabled) {
-      console.log('[PageNexus] Cópia automática desativada nas preferências');
-      return;
-    }
+  if (!autoCopyEnabled && !closeTabEnabled) {
+    console.log('[PageNexus] Cópia automática e fechamento de aba desativados nas preferências');
+    return;
+  }
 
   const contentDiv = document.getElementById('pagenexus-content');
   console.log('[PageNexus] Tentando copiar conteúdo...');
@@ -205,8 +205,8 @@
   text += contentDiv.textContent.trim();
   console.log(`[PageNexus] Texto a copiar: ${text.length} caracteres`);
 
-    await doCopy(text);
-  }
+  await doCopy(text, closeTabEnabled);
+}
 
   /**
    * Tenta copiar o texto para a área de transferência.
@@ -217,42 +217,43 @@
    * falha silenciosamente. Por isso, tentamos trazer o foco de volta e, se ainda
    * assim não houver foco, copiamos na primeira interação do usuário com a página.
    */
-  async function doCopy(text) {
+  async function doCopy(text, closeTab = false) {
     try { window.focus(); } catch (e) { /* ignora */ }
 
     if (document.hasFocus() && navigator.clipboard && navigator.clipboard.writeText) {
-      try {
-        await navigator.clipboard.writeText(text);
-        console.log(`[PageNexus] ✅ Página ${currentPage + 1} copiada via Clipboard API`);
-        showCopyFeedback();
-        return;
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log(`[PageNexus] ✅ Página ${currentPage + 1} copiada via Clipboard API`);
+      showCopyFeedback();
+      if (closeTab) closeCurrentTab();
+      return;
       } catch (error) {
         console.warn('[PageNexus] Clipboard API falhou, tentando fallback:', error);
       }
     }
 
     // Fallback para execCommand (browsers antigos ou quando a Clipboard API falha)
-    if (copyUsingExecCommand(text)) {
+    if (copyUsingExecCommand(text, closeTab)) {
       return;
     }
 
     // Se nada funcionou (normalmente porque a página ainda não tem foco), copia
     // assim que o usuário interagir com a página pela primeira vez.
     console.log('[PageNexus] Documento sem foco; aguardando interação do usuário para copiar.');
-    scheduleCopyOnInteraction(text);
+    scheduleCopyOnInteraction(text, closeTab);
   }
 
   /**
    * Agenda a cópia para a próxima interação do usuário com a página, garantindo
    * que o documento tenha foco no momento da cópia.
    */
-  function scheduleCopyOnInteraction(text) {
-    const events = ['focus', 'pointerdown', 'keydown'];
+function scheduleCopyOnInteraction(text, closeTab = false) {
+  const events = ['focus', 'pointerdown', 'keydown'];
 
-    const handler = () => {
-      events.forEach(evt => window.removeEventListener(evt, handler, true));
-      doCopy(text);
-    };
+  const handler = () => {
+    events.forEach(evt => window.removeEventListener(evt, handler, true));
+    doCopy(text, closeTab);
+  };
 
     events.forEach(evt => window.addEventListener(evt, handler, true));
   }
@@ -261,7 +262,7 @@
    * Fallback para copiar usando execCommand (para browsers mais antigos ou sem permissão).
    * Retorna true se a cópia foi bem-sucedida.
    */
-  function copyUsingExecCommand(text) {
+  function copyUsingExecCommand(text, closeTab = false) {
     try {
       const textArea = document.createElement('textarea');
       textArea.value = text;
@@ -275,10 +276,11 @@
       const successful = document.execCommand('copy');
       document.body.removeChild(textArea);
 
-      if (successful) {
-        console.log(`[PageNexus] ✅ Página ${currentPage + 1} copiada via execCommand`);
-        showCopyFeedback();
-        return true;
+    if (successful) {
+      console.log(`[PageNexus] ✅ Página ${currentPage + 1} copiada via execCommand`);
+      showCopyFeedback();
+      if (closeTab) closeCurrentTab();
+      return true;
       }
 
       console.error('[PageNexus] ❌ execCommand retornou false');
@@ -292,39 +294,42 @@
   /**
    * Mostra toast visual de que a página foi copiada
    */
-  function showCopyFeedback() {
-    // Remove toast anterior se existir
-    const existingFeedback = document.getElementById('pagenexus-copy-feedback');
-    if (existingFeedback) {
-      existingFeedback.remove();
-    }
-
-    const feedback = document.createElement('div');
-    feedback.id = 'pagenexus-copy-feedback';
-    feedback.textContent = I18n.getMessage('copyFeedback', currentPage + 1);
-    feedback.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #4CAF50;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      z-index: 10000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    `;
-
-    document.body.appendChild(feedback);
-
-    // Remove após 2 segundos
-    setTimeout(() => {
-      feedback.style.opacity = '0';
-      feedback.style.transition = 'opacity 0.3s ease';
-      setTimeout(() => feedback.remove(), 300);
-    }, 2000);
+function showCopyFeedback() {
+  const existingFeedback = document.getElementById('pagenexus-copy-feedback');
+  if (existingFeedback) {
+    existingFeedback.remove();
   }
+
+  const feedback = document.createElement('div');
+  feedback.id = 'pagenexus-copy-feedback';
+  feedback.textContent = I18n.getMessage('copyFeedback', currentPage + 1);
+  feedback.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  `;
+
+  document.body.appendChild(feedback);
+
+  setTimeout(() => {
+    feedback.style.opacity = '0';
+    feedback.style.transition = 'opacity 0.3s ease';
+    setTimeout(() => feedback.remove(), 300);
+  }, 2000);
+}
+
+function closeCurrentTab() {
+  console.log('[PageNexus] Fechando aba após cópia...');
+  browser.runtime.sendMessage({ action: "closeTab" });
+}
 
   function nextPage() {
     if (currentPage < pages.length - 1) {
