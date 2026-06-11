@@ -4,37 +4,71 @@ console.log("[PageNexus Background] Script carregado!");
 
 // Configuração padrão dos limites
 const DEFAULT_LIMITS = {
-  chatgpt: 5000,
-  copilot: 3000,
-  claude: 10000,
-  gemini: 35000,
-  mistral: 8000,
-  custom: 10000
+chatgpt: 5000,
+copilot: 3000,
+claude: 10000,
+gemini: 35000,
+mistral: 8000,
+custom: 10000
 };
 
-// Criação dos itens do menu de contexto
+const CONTEXT_MENU_IDS = [
+"run-all-tabs-close",
+"run-tabs-right-close",
+"run-tabs-left-close",
+"run-other-tabs-close"
+];
+
+function createContextMenus() {
 browser.contextMenus.create({
-  id: "run-all-tabs-close",
-  title: browser.i18n.getMessage("contextMenuRunAllTabsClose"),
-  contexts: ["tab"]
+id: "run-all-tabs-close",
+title: browser.i18n.getMessage("contextMenuRunAllTabsClose"),
+contexts: ["tab"]
 });
 
 browser.contextMenus.create({
-  id: "run-tabs-right-close",
-  title: browser.i18n.getMessage("contextMenuRunTabsRightClose"),
-  contexts: ["tab"]
+id: "run-tabs-right-close",
+title: browser.i18n.getMessage("contextMenuRunTabsRightClose"),
+contexts: ["tab"]
 });
 
 browser.contextMenus.create({
-  id: "run-tabs-left-close",
-  title: browser.i18n.getMessage("contextMenuRunTabsLeftClose"),
-  contexts: ["tab"]
+id: "run-tabs-left-close",
+title: browser.i18n.getMessage("contextMenuRunTabsLeftClose"),
+contexts: ["tab"]
 });
 
 browser.contextMenus.create({
-  id: "run-other-tabs-close",
-  title: browser.i18n.getMessage("contextMenuRunOtherTabsClose"),
-  contexts: ["tab"]
+id: "run-other-tabs-close",
+title: browser.i18n.getMessage("contextMenuRunOtherTabsClose"),
+contexts: ["tab"]
+});
+}
+
+function removeContextMenus() {
+for (const id of CONTEXT_MENU_IDS) {
+browser.contextMenus.remove(id).catch(() => {});
+}
+}
+
+async function updateContextMenus(show) {
+if (show) {
+createContextMenus();
+} else {
+removeContextMenus();
+}
+}
+
+browser.storage.local.get('showContextMenus').then((result) => {
+if (result.showContextMenus === true) {
+createContextMenus();
+}
+});
+
+browser.storage.onChanged.addListener((changes, area) => {
+if (area === 'local' && 'showContextMenus' in changes) {
+updateContextMenus(changes.showContextMenus.newValue === true);
+}
 });
 
 async function runOnTabsAndClose(tabIds) {
@@ -89,7 +123,8 @@ browser.runtime.onInstalled.addListener((details) => {
     browser.storage.local.set({
       selectedLLM,
       llmLimits: DEFAULT_LIMITS,
-      maxCharsForAI
+      maxCharsForAI,
+      showContextMenus: false
     }).then(() => {
       console.log(`[PageNexus Background] Configurações padrão salvas: ${selectedLLM} = ${maxCharsForAI.toLocaleString()} caracteres`);
 

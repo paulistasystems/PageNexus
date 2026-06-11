@@ -56,6 +56,7 @@ async function saveSettings() {
   const selectedLLM = document.getElementById('llmPreset').value;
   const autoCopyToClipboard = document.getElementById('autoCopyToClipboard').checked;
   const closeTabAfterCopy = document.getElementById('closeTabAfterCopy').checked;
+  const showContextMenus = document.getElementById('showContextMenus').checked;
   const language = document.getElementById('language').value;
 
   const limits = {};
@@ -72,15 +73,16 @@ async function saveSettings() {
     maxCharsForAI,
     autoCopyToClipboard,
     closeTabAfterCopy,
+    showContextMenus,
     language
   });
 
-  console.log(`[PageNexus] Settings saved: ${selectedLLM} = ${maxCharsForAI.toLocaleString()} chars, autoCopy: ${autoCopyToClipboard}, closeTab: ${closeTabAfterCopy}, language: ${language}`);
+  console.log(`[PageNexus] Settings saved: ${selectedLLM} = ${maxCharsForAI.toLocaleString()} chars, autoCopy: ${autoCopyToClipboard}, closeTab: ${closeTabAfterCopy}, showContextMenus: ${showContextMenus}, language: ${language}`);
   showStatus(I18n.getMessage('optionsSaved'));
 }
 
 async function restoreOptions() {
-  const result = await browser.storage.local.get(['selectedLLM', 'llmLimits', 'maxCharsForAI', 'autoCopyToClipboard', 'closeTabAfterCopy', 'language']);
+  const result = await browser.storage.local.get(['selectedLLM', 'llmLimits', 'maxCharsForAI', 'autoCopyToClipboard', 'closeTabAfterCopy', 'showContextMenus', 'language']);
 
   const language = result.language || I18n._detectBrowserLocale();
   document.getElementById('language').value = language;
@@ -96,6 +98,9 @@ async function restoreOptions() {
   const closeTabAfterCopy = result.closeTabAfterCopy === true;
   document.getElementById('closeTabAfterCopy').checked = closeTabAfterCopy;
 
+  const showContextMenus = result.showContextMenus === true;
+  document.getElementById('showContextMenus').checked = showContextMenus;
+
   const limits = result.llmLimits || DEFAULT_LIMITS;
 
   for (const [inputId, llmKey] of Object.entries(LIMIT_INPUTS)) {
@@ -103,12 +108,13 @@ async function restoreOptions() {
     input.value = limits[llmKey] || DEFAULT_LIMITS[llmKey];
   }
 
-  console.log(`[PageNexus] Settings loaded: ${selectedLLM}, autoCopy: ${autoCopyToClipboard}, closeTab: ${closeTabAfterCopy}, language: ${language}`);
+  console.log(`[PageNexus] Settings loaded: ${selectedLLM}, autoCopy: ${autoCopyToClipboard}, closeTab: ${closeTabAfterCopy}, showContextMenus: ${showContextMenus}, language: ${language}`);
 }
 
 document.getElementById('llmPreset').addEventListener('change', saveSettings);
 document.getElementById('autoCopyToClipboard').addEventListener('change', saveSettings);
 document.getElementById('closeTabAfterCopy').addEventListener('change', saveSettings);
+document.getElementById('showContextMenus').addEventListener('change', saveSettings);
 document.getElementById('language').addEventListener('change', async () => {
   const newLang = document.getElementById('language').value;
   await I18n.setLocale(newLang);

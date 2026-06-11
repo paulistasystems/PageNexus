@@ -74,6 +74,12 @@
   "optionsCloseTabAfterCopyHint": {
     "message": "Closes the current tab after the content is copied to the clipboard"
   },
+  "optionsShowContextMenus": {
+    "message": "Show tab context menu actions"
+  },
+  "optionsShowContextMenusHint": {
+    "message": "Adds bulk actions to the tab right-click menu (run on all tabs, tabs to the right, etc.)"
+  },
   "contextMenuRunAllTabsClose": {
     "message": "Run on all tabs & close"
   },

@@ -74,6 +74,12 @@
   "optionsCloseTabAfterCopyHint": {
     "message": "Fecha a aba atual após o conteúdo ser copiado para a área de transferência"
   },
+  "optionsShowContextMenus": {
+    "message": "Mostrar ações do menu de contexto da aba"
+  },
+  "optionsShowContextMenusHint": {
+    "message": "Adiciona ações em massa ao menu de clique direito na aba (executar em todas as abas, abas à direita, etc.)"
+  },
   "contextMenuRunAllTabsClose": {
     "message": "Executar em todas as abas & fechar"
   },

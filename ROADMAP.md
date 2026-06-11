@@ -2,6 +2,9 @@
 
 ## ✅ Recently Completed
 
+### v0.5.2 - Optional Context Menu Actions
+- [x] **Make context menu actions optional** - Tab context menu actions are now hidden by default and can be enabled via the preferences page (showContextMenus setting)
+
 ### v0.5.1 - Bulk Tab Context Menu Actions
 - [x] **Bulk tab context menu actions** - Added tab context menu items: Run on all tabs & close, Run on tabs to the right & close, Run on tabs to the left & close, Run on other tabs & close
 
