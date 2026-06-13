@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "permissions": [
@@ -41,6 +41,11 @@
     "scripts": [
       "background.js"
     ]
+  },
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true,
+    "open_in_tab": true
   },
   "browser_specific_settings": {
     "gecko": {

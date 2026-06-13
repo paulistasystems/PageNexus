@@ -2,6 +2,9 @@
 
 ## ✅ Recently Completed
 
+### v0.5.3 - Open Preferences on Install
+- [x] **Open preferences page on first install** - Added `options_ui` manifest field so `browser.runtime.openOptionsPage()` works correctly, ensuring the preferences tab opens when the extension is first installed
+
 ### v0.5.2 - Optional Context Menu Actions
 - [x] **Make context menu actions optional** - Tab context menu actions are now hidden by default and can be enabled via the preferences page (showContextMenus setting)
 
@@ -10,7 +13,7 @@
 
 ### v0.5.0 - Close Tab After Copy, Context Menu Actions & Keyboard Shortcut
 - [x] **Close tab after copy** - New option that closes the current tab after content is copied to the clipboard
-- [x] **Remove Preferences from context menu** - Removed the Preferences tab from the extension's browser context menu (options still accessible via `options.html` directly)
+- [x] **Remove Preferences from context menu** - Removed the Preferences tab from the extension's browser context menu (options now accessible via preferences page on install or from Add-ons manager)
 - [x] **Toolbar shortcut** - Added `Ctrl+E` keyboard shortcut to toggle reader mode, firing the same action as the toolbar button (via the WebExtensions `_execute_browser_action` command)
 
 ### v0.4.2 - Bug Fixes
